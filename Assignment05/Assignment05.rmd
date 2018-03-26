@@ -1,0 +1,74 @@
+---
+title: "Assignment05"
+author: "Anthony Egbuniwe"
+date: "March 21, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r Assignment05}
+df <- read.table("yob2016.txt", header = FALSE, sep = ';')
+
+names(df) <- c("Name", "Gender", "Amount2016")
+
+# b.  Summary and structure of df
+
+summary(df)
+
+# Structure of the data
+str(df)
+# Check the Name That was Entered Twice
+grep("yyy",df$Name, value = TRUE)
+
+# Remove the redundant observation
+
+y2016 <- df[df$Name != "Fionayyy",]
+
+# Data Merging (30 points)
+y2015 <- read.table("yob2015.txt", header = FALSE, sep = ",")
+names(y2015) <- c("Name","Gender", "Total_Children_05")
+View(y2015)
+
+#b   Last 10 rows
+tail(y2015, 10)
+
+# Total children given the last 10 names are equal; 
+# 5 children were given the last 10 names
+
+Final <- merge(y2016,y2015, by = "Name")
+
+# Data Summary  
+# a.
+Final$Total <- Final$Amount2016 + Final$Total_Children_05
+
+# People Given popular names in the Two Years Combined
+sum(Final$Total)
+
+#  11404228
+
+# B Sort by Total
+
+Final <- Final[order(Final$Total, decreasing = TRUE),]
+
+# Top 10 most popular names
+head(Final,10)
+
+# Ommit Boys
+Final <- Final[Final$Gender.x == "F" & Final$Gender.y == "F",]
+
+top10girsl <- head(Final, 10)
+# List of Top 10 Girl Names
+
+top10girsl
+
+# write.csv(data.frame(top10girsl$Name, top10girsl$Total), "top10girsl.csv")
+
+# Github
+# Github URL: https://github.com/egbuniwe/SMU-MSDS-homework/tree/master/Assignment05
+
+```
+
